@@ -6,7 +6,6 @@ import com.mediagenda.mediagenda.enums.EstadoCita;
 import com.mediagenda.mediagenda.usuario.model.Medico;
 import com.mediagenda.mediagenda.usuario.model.Paciente;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -38,7 +37,6 @@ public class Cita {
     @ManyToOne
     @JoinColumn(name = "rut", nullable = false)
     private Medico medico;
-
 
     public Cita() {
     }
