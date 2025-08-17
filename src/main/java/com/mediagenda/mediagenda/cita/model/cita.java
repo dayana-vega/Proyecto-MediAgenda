@@ -3,17 +3,27 @@ package com.mediagenda.mediagenda.cita.model;
 import java.time.LocalDateTime;
 
 import com.mediagenda.mediagenda.enums.EstadoCita;
+import com.mediagenda.mediagenda.usuario.model.Medico;
+import com.mediagenda.mediagenda.usuario.model.Paciente;
 
+import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 
 @Entity
+@Table(name = "citas")
 public class cita {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private LocalDateTime fechaCita;
 
@@ -21,13 +31,16 @@ public class cita {
     @Enumerated(EnumType.STRING)
     private EstadoCita estadoCita;
 
-    public cita() {
-    }
+    @ManyToOne
+    @JoinColumn(name = "rut", nullable = false)
+    private Paciente paciente;
 
-    public cita(int id, LocalDateTime fechaCita, @NotNull EstadoCita estadoCita) {
-        this.id = id;
-        this.fechaCita = fechaCita;
-        this.estadoCita = estadoCita;
+    @ManyToOne
+    @JoinColumn(name = "rut", nullable = false)
+    private Medico medico;
+
+
+    public cita() {
     }
 
     public int getId() {
@@ -54,7 +67,6 @@ public class cita {
         this.estadoCita = estadoCita;
     }
 
-    
 
 
     
