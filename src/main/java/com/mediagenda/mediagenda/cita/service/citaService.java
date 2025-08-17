@@ -7,7 +7,7 @@ import com.mediagenda.mediagenda.cita.repository.CitaRepository;
 import com.mediagenda.mediagenda.usuario.repository.UsuarioRepository;
 
 @Service
-public class citaService {
+public class CitaService {
 
     @Autowired
     private CitaRepository citaRepository;
