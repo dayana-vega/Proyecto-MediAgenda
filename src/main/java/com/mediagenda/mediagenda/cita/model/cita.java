@@ -21,7 +21,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "citas")
-public class cita {
+public class Cita {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -40,7 +40,7 @@ public class cita {
     private Medico medico;
 
 
-    public cita() {
+    public Cita() {
     }
 
     public int getId() {
