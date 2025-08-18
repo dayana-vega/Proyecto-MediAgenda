@@ -19,7 +19,11 @@ public class citaService {
     private UsuarioRepository usuarioRepository;
 
     public String crearCita(Cita cita){
-        Optional<Cita> citaExistente = citaRepository.findByPacieteRut(cita.getPacienteRut).getRut());
+        Optional<Cita> citaExistente = citaRepository.findByPacienteRut(cita.getPaciente()).getRut());
+         if (citaExistente.isPresent()){
+            throw new RuntimeException("El paciente ya tiene una cita registrada")
+         }
+        
         return;
     }
 
