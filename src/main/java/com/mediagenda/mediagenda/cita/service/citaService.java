@@ -24,7 +24,7 @@ public class citaService {
             throw new RuntimeException("El paciente ya tiene una cita registrada")
          }
         
-        return;
+        return ;
     }
 
 }
