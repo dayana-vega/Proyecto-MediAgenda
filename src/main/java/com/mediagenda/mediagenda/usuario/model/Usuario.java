@@ -35,12 +35,12 @@ public abstract class Usuario {
 
     @NotBlank
     @Size(max = 60)
-    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚÑáéíóúñ' -]+$", message = "Los nombres solo deben contener letras")
+    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚÑáéíóúñ' -]+$", message = "El nombre solo deben contener letras")
     private String nombre;
     
     @NotBlank
     @Size(max = 60)
-    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚÑáéíóúñ' -]+$", message = "Los nombres solo deben contener letras")
+    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚÑáéíóúñ' -]+$", message = "El apellido solo deben contener letras")
     private String apellido;
 
     @Email

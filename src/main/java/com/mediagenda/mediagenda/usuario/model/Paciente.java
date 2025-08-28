@@ -39,6 +39,7 @@ public class Paciente extends Usuario {
     @JsonManagedReference
     private Set<Medico> medicos = new HashSet<>();
 
+    
 
     public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
