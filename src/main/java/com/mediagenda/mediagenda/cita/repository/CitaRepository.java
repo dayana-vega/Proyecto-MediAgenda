@@ -11,6 +11,6 @@ public interface CitaRepository extends JpaRepository<Cita, Integer>{
 
     Optional<Cita> findByPacienteRut (String Rut);
 
-    Optional<Cita> findByMedicoIdAndFechaCita ( LocalDateTime fechaCita);
+    Optional<Cita> findByMedicoIdAndFechaCita ( Long medico_id, LocalDateTime fechaCita );
 
 }

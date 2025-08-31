@@ -46,7 +46,9 @@ public class CitaService {
         }
 
         if (citaRepository.findByMedicoIdAndFechaCita(
+            cita.getMedico().getId(),   
             cita.getFechaCita()
+            
         ).isPresent()){
             throw new CitaException ("El medico ya tiene una cita en ese horario");
         }
