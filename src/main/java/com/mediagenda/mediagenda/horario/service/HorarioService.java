@@ -21,7 +21,7 @@ public class HorarioService {
     private final HorarioRepository horarioRepository;
 
     public List<LocalTime> generarBloques(HorarioMedico horarioMedico){
-        List<LocalTime> bloques = new ArrayList<>;
+        List<LocalTime> bloques = new ArrayList<>();
         LocalTime actual = horarioMedico.getHorarioInicio();
 
         while (!actual.isAfter(horarioMedico.getHorarioFin().minusHours(1))){
