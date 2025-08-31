@@ -2,15 +2,20 @@ package com.mediagenda.mediagenda.usuario.model;
 
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.mediagenda.mediagenda.cita.model.Cita;
 import com.mediagenda.mediagenda.enums.RolUsuario;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,6 +35,9 @@ public class Medico extends Usuario{
     
     @JsonBackReference
     private Set<Paciente> pacientes = new HashSet<>();
+
+    @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cita> citas;
 
 
     public String getEspecialidad() {
