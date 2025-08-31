@@ -8,10 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.mediagenda.mediagenda.cita.model.Cita;
 import com.mediagenda.mediagenda.cita.repository.CitaRepository;
+import com.mediagenda.mediagenda.horario.repository.HorarioRepository;
 import com.mediagenda.mediagenda.usuario.repository.UsuarioRepository;
 
 @Service
-public class citaService {
+public class CitaService {
+
+    private final HorarioRepository horarioRepository;
 
     @Autowired
     private CitaRepository citaRepository;
@@ -19,14 +22,14 @@ public class citaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public String crearCita(Cita cita){
-        Optional<Cita> citaExistente = citaRepository.findByPacienteRut(cita.getPaciente()).getRut());
-         if (citaExistente.isPresent()){
-            throw new RuntimeException("El paciente ya tiene una cita registrada")
-         }
-        
-        return ;
+    CitaService(HorarioRepository horarioRepository) {
+        this.horarioRepository = horarioRepository;
     }
+
+    //CREAR CITA 
+    public Cita creaCita(Cita cita){
+        Horario horario = horarioRepository.findByMedicoAndDia
+
     //TRAER TODO EL LISTADO DE CITAS
     public List<Cita> obtenerTodasCitas(){
         return citaRepository.findAll();
