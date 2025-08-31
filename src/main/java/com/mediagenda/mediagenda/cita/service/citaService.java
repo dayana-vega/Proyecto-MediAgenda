@@ -1,5 +1,6 @@
 package com.mediagenda.mediagenda.cita.service;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.mediagenda.mediagenda.cita.model.Cita;
 import com.mediagenda.mediagenda.cita.repository.CitaRepository;
+import com.mediagenda.mediagenda.exceptions.CitaException;
+import com.mediagenda.mediagenda.horario.model.HorarioMedico;
 import com.mediagenda.mediagenda.horario.repository.HorarioRepository;
 import com.mediagenda.mediagenda.horario.service.HorarioService;
 import com.mediagenda.mediagenda.usuario.repository.UsuarioRepository;
@@ -31,11 +34,25 @@ public class CitaService {
     }
 
     //CREAR CITA 
-    public Cita creaCita(Cita cita){
-        HorarioMedico horarioMedico = HorarioRepository.findByMedicoIdAndDia( 
+    public Cita crearCita (Cita cita) throws CitaException{
+        HorarioMedico horarioMedico = horarioRepository.findByMedicoIdAndDia(
             cita.getMedico().getId(),
-            cita.getFechaHora().getDayOfWeek()
-        ).orElseTrow(() -> new RuntimeException('El médico no atiende ese día'));
+            cita.getFechaCita().getDayOfWeek()
+        ).orElseThrow(() -> new CitaException("El médico no atiende ese día"));
+
+        List<LocalTime> bloquesDisponibles = horarioService.generarBloques(horarioMedico);
+        if (!bloquesDisponibles.contains(cita.getFechaCita().toLocalTime())){
+            throw new CitaException("Ese horario no está en la agenda del médico");
+        }
+
+        if (citaRepository.findByMedicoIdAndFechaCita(
+            cita.getFechaCita()
+        ).isPresent()){
+            throw new CitaException ("El medico ya tiene una cita en ese horario");
+        }
+        return citaRepository.save(cita);
+    }
+
 
     //TRAER TODO EL LISTADO DE CITAS
     public List<Cita> obtenerTodasCitas(){

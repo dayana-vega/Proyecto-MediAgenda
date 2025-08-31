@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import com.mediagenda.mediagenda.exceptions.NotFoundException;
 import com.mediagenda.mediagenda.usuario.dto.UsuarioDTO;
-import com.mediagenda.mediagenda.usuario.exceptions.NotFoundException;
 import com.mediagenda.mediagenda.usuario.model.Usuario;
 import com.mediagenda.mediagenda.usuario.repository.UsuarioRepository;
 
