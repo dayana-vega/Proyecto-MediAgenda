@@ -43,7 +43,7 @@ public class Paciente extends Usuario {
     @JsonManagedReference
     private Set<Medico> medicos = new HashSet<>();
 
-    @OneToMany(mappedBy = "id",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "paciente",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cita> citas;
 
     

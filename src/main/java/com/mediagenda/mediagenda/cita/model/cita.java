@@ -9,6 +9,7 @@ import com.mediagenda.mediagenda.usuario.model.Paciente;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,12 +31,12 @@ public class Cita {
     @Enumerated(EnumType.STRING)
     private EstadoCita estadoCita;
 
-    @ManyToOne
-    @JoinColumn(name = "rut", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "paciente_id", referencedColumnName = "id", nullable = false)
     private Paciente paciente;
 
-    @ManyToOne
-    @JoinColumn(name = "rut", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "medico_id",referencedColumnName = "id", nullable = false)
     private Medico medico;
 
     public Cita() {
