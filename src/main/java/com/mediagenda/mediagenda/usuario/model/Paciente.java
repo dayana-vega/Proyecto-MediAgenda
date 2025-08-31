@@ -2,17 +2,21 @@ package com.mediagenda.mediagenda.usuario.model;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.mediagenda.mediagenda.cita.model.Cita;
 import com.mediagenda.mediagenda.enums.RolUsuario;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Past;
 
@@ -38,6 +42,9 @@ public class Paciente extends Usuario {
     )
     @JsonManagedReference
     private Set<Medico> medicos = new HashSet<>();
+
+    @OneToMany(mappedBy = "id",cascade = CascadeType.ALL)
+    private List<Cita> citas;
 
     
 
