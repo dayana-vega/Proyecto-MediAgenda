@@ -1,5 +1,6 @@
 package com.mediagenda.mediagenda.cita.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +27,17 @@ public class citaService {
         
         return ;
     }
+    //TRAER TODO EL LISTADO DE CITAS
+    public List<Cita> obtenerTodasCitas(){
+        return citaRepository.findAll();
+    }
+
+
+    //BUSCAR CITAS POR ID 
+    public Optional<Cita> buscarCita(Integer id){
+        return citaRepository.findById(id);
+    }
+
+    
 
 }
