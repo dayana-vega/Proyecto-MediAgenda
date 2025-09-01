@@ -67,6 +67,19 @@ public class CitaService {
         return citaRepository.findById(id);
     }
 
-    
+    //ACTUALIZAR CITA 
+    public Cita actualizCita (Long Id, Cita citaActualizada){
+        return citaRepository.findById(id).map(cita ->{
+            cita.setFechaCita(citaActualizada.getFechaCita());
+            cita.setPaciente(citaActualizada.getPaciente());
+            cita.setMedico(citaActualizada.getMedico());
 
+        }).orElseThrow(() -> new CitaException("Cita no encontrada con id: " + id));
+
+    }
+
+    //ELIMINAR CITA 
+    public void eliminarCita (Integer id){
+        citaRepository.deleteById(id);
+    }
 }
