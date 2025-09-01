@@ -39,8 +39,19 @@ public class Cita {
     @JoinColumn(name = "medico_id",referencedColumnName = "id", nullable = false)
     private Medico medico;
 
+    
     public Cita() {
     }
+
+    
+    public Cita(int id, LocalDateTime fechaCita, @NotNull EstadoCita estadoCita, Paciente paciente, Medico medico) {
+        this.id = id;
+        this.fechaCita = fechaCita;
+        this.estadoCita = estadoCita;
+        this.paciente = paciente;
+        this.medico = medico;
+    }
+
 
     public int getId() {
         return id;

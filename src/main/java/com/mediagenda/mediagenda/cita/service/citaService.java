@@ -33,6 +33,7 @@ public class CitaService {
         this.horarioService = horarioService;
     }
 
+     
     //CREAR CITA 
     public Cita crearCita (Cita cita) throws CitaException{
         HorarioMedico horarioMedico = horarioRepository.findByMedicoIdAndDia(
