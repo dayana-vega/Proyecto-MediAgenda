@@ -69,7 +69,7 @@ public class CitaService {
     }
 
     //ACTUALIZAR CITA 
-    public Cita actualizCita (Long Id, Cita citaActualizada){
+    public Cita actualizCita (Integer id, Cita citaActualizada){
         return citaRepository.findById(id).map(cita ->{
             cita.setFechaCita(citaActualizada.getFechaCita());
             cita.setPaciente(citaActualizada.getPaciente());
