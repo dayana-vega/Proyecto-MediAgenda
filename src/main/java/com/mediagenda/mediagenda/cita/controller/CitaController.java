@@ -20,7 +20,7 @@ public class CitaController {
 
     public CitaController(CitaService citaService) {
         this.citaService = citaService;
-
+    }
     //CREAR UNA CITA
     @PostMapping
     public ResponseEntity<?> crearCita(@RequestBody Cita cita){
