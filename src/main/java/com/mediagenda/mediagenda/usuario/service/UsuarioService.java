@@ -28,6 +28,8 @@ public class UsuarioService {
         .orElseThrow(() -> new NotFoundException("Usuario no existe"));
     }
 
-
+public UsuarioDTO validarCredenciales(LoginDTO){
+    boolean usuarioRepository.existByEmailAndContrasenia(dto.getEmail(), dto.getContrasenia)
+}
 
 }
