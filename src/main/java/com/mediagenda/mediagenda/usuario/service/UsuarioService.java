@@ -1,14 +1,11 @@
 package com.mediagenda.mediagenda.usuario.service;
 
-import java.lang.foreign.Linker.Option;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import com.mediagenda.mediagenda.exceptions.NotFoundException;
-import com.mediagenda.mediagenda.usuario.dto.UsuarioDTO;
 import com.mediagenda.mediagenda.usuario.model.Usuario;
 import com.mediagenda.mediagenda.usuario.repository.UsuarioRepository;
 
@@ -28,8 +25,36 @@ public class UsuarioService {
         .orElseThrow(() -> new NotFoundException("Usuario no existe"));
     }
 
-public UsuarioDTO validarCredenciales(LoginDTO){
-    boolean usuarioRepository.existByEmailAndContrasenia(dto.getEmail(), dto.getContrasenia)
-}
+    public String crearUsuario(Usuario usuario){
+        Optional<Usuario> user = usuarioRepository.findByEmailIgnoreCase(usuario.getEmail());
+
+        if (user.isPresent()){
+            return "Usuario ya se encuentra creado";
+
+        }
+        else{
+            usuarioRepository.save(usuario);
+            return "Usuario creado exitosamente";
+        }
+
+    }
+    public String eliminarUsuario(Usuario usuario){
+        Optional<Usuario> user = usuarioRepository.findByEmailIgnoreCase(usuario.getEmail());
+
+        if (user.isPresent()){
+            usuarioRepository.deleteById(usuario.getId());
+            return "Usuario eliminado";
+
+        }
+        else{
+            usuarioRepository.save(usuario);
+            return "Usuario no existe para eliminar";
+        }
+
+    }
+
+
+
+
 
 }
