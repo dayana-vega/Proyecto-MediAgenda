@@ -9,6 +9,8 @@ import com.mediagenda.mediagenda.exceptions.NotFoundException;
 import com.mediagenda.mediagenda.usuario.model.Usuario;
 import com.mediagenda.mediagenda.usuario.service.UsuarioService;
 
+import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 
 // Marca la clase como un controlador REST
@@ -44,7 +46,7 @@ public class UsuarioController {
      */
     @PostMapping
     // @RequestBody mapea el cuerpo JSON de la petición al objeto Usuario
-    public ResponseEntity<String> crearUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<String> crearUsuario(@Valid @RequestBody Usuario usuario) {
         String resultado = usuarioService.crearUsuario(usuario);
         
         if (resultado.contains("ya se encuentra creado")) {
@@ -62,9 +64,9 @@ public class UsuarioController {
      * Nota: DELETE por cuerpo es menos convencional, DELETE por ID es más común.
      * Adaptado para usar el email/ID en el cuerpo según tu service.
      */
-    @DeleteMapping
-    public ResponseEntity<String> eliminarUsuario(@RequestBody Usuario usuario) {
-        String resultado = usuarioService.eliminarUsuario(usuario);
+    @DeleteMapping("/{rut}")
+    public ResponseEntity<String> eliminarUsuario(@PathVariable String rut) {
+        String resultado = usuarioService.eliminarUsuario(rut);
 
         if (resultado.contains("Usuario no existe")) {
              // Si no existe para eliminar, retorna 404 Not Found

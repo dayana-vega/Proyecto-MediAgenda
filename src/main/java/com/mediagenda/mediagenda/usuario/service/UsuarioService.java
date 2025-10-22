@@ -38,16 +38,16 @@ public class UsuarioService {
         }
 
     }
-    public String eliminarUsuario(Usuario usuario){
-        Optional<Usuario> user = usuarioRepository.findByEmailIgnoreCase(usuario.getEmail());
+    public String eliminarUsuario(String rut){
+        Optional<Usuario> user = usuarioRepository.findByRut(rut);
 
         if (user.isPresent()){
+            Usuario usuario = user.get();
             usuarioRepository.deleteById(usuario.getId());
             return "Usuario eliminado";
 
         }
         else{
-            usuarioRepository.save(usuario);
             return "Usuario no existe para eliminar";
         }
 

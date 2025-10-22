@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mediagenda.mediagenda.cita.model.Cita;
 import com.mediagenda.mediagenda.enums.RolUsuario;
@@ -40,6 +41,7 @@ public class Paciente extends Usuario {
         joinColumns = @JoinColumn(name = "paciente_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "medico_id", referencedColumnName = "id")
     )
+    @JsonIgnore
     @JsonManagedReference
     private Set<Medico> medicos = new HashSet<>();
 

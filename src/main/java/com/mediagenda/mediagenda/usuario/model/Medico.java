@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mediagenda.mediagenda.cita.model.Cita;
 import com.mediagenda.mediagenda.enums.RolUsuario;
 
@@ -31,7 +32,7 @@ public class Medico extends Usuario{
     }
 
     @ManyToMany(mappedBy = "medicos", fetch = FetchType.LAZY)
-    
+    @JsonIgnore
     @JsonBackReference
     private Set<Paciente> pacientes = new HashSet<>();
 
