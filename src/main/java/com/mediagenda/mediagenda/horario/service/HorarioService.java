@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import com.mediagenda.mediagenda.horario.model.HorarioMedico;
-import com.mediagenda.mediagenda.horario.repository.HorarioRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 @Validated
 public class HorarioService {
     
-    private final HorarioRepository horarioRepository;
 
     public List<LocalTime> generarBloques(HorarioMedico horarioMedico){
         List<LocalTime> bloques = new ArrayList<>();

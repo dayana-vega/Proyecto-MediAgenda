@@ -13,7 +13,6 @@ import com.mediagenda.mediagenda.exceptions.CitaException;
 import com.mediagenda.mediagenda.horario.model.HorarioMedico;
 import com.mediagenda.mediagenda.horario.repository.HorarioRepository;
 import com.mediagenda.mediagenda.horario.service.HorarioService;
-import com.mediagenda.mediagenda.usuario.repository.UsuarioRepository;
 
 @Service
 public class CitaService {
@@ -25,8 +24,7 @@ public class CitaService {
     @Autowired
     private CitaRepository citaRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+
 
     CitaService(HorarioRepository horarioRepository, HorarioService horarioService) {
         this.horarioRepository = horarioRepository;
@@ -57,7 +55,6 @@ public class CitaService {
     }
 
 
-    //TRAER TODO EL LISTADO DE CITAS
     public List<Cita> obtenerTodasCitas(){
         return citaRepository.findAll();
     }
@@ -69,14 +66,17 @@ public class CitaService {
     }
 
     //ACTUALIZAR CITA 
-    public Cita actualizCita (Integer id, Cita citaActualizada){
-        return citaRepository.findById(id).map(cita ->{
-            cita.setFechaCita(citaActualizada.getFechaCita());
-            cita.setPaciente(citaActualizada.getPaciente());
-            cita.setMedico(citaActualizada.getMedico());
+    
+    public Cita actualizarCita(Integer id, Cita citaActualizada) throws CitaException {
+        return citaRepository.findById(id).map(citaExistente -> {
+            
+            citaExistente.setFechaCita(citaActualizada.getFechaCita());
+            citaExistente.setPaciente(citaActualizada.getPaciente());
+            citaExistente.setMedico(citaActualizada.getMedico());
+
+            return citaRepository.save(citaExistente);
 
         }).orElseThrow(() -> new CitaException("Cita no encontrada con id: " + id));
-
     }
 
     //ELIMINAR CITA 
