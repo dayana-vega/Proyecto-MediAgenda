@@ -25,15 +25,12 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    /**
-     * Obtener usuario por email - SIN devolver la contraseña
-     */
+
     @GetMapping("/email/{email}")
     public ResponseEntity<Map<String, Object>> getUsuarioByEmail(@PathVariable String email) {
         try {
             Usuario usuario = usuarioService.findByEmail(email);
             
-            // Crear respuesta personalizada SIN la contraseña
             Map<String, Object> response = new HashMap<>();
             response.put("id", usuario.getId());
             response.put("rut", usuario.getRut());
@@ -42,7 +39,6 @@ public class UsuarioController {
             response.put("email", usuario.getEmail());
             response.put("rol", usuario.getRol().toString());
             
-            // Agregar campos específicos según el tipo de usuario
             if (usuario instanceof Medico) {
                 Medico medico = (Medico) usuario;
                 response.put("especialidad", medico.getEspecialidad());
@@ -60,13 +56,10 @@ public class UsuarioController {
         }
     }
 
-    /**
-     * Crear usuario - Acepta Map para manejar polimorfismo
-     */
+
     @PostMapping
     public ResponseEntity<String> crearUsuario(@RequestBody Map<String, Object> usuarioData) {
         try {
-            // Validar campo rol
             if (!usuarioData.containsKey("rol") || usuarioData.get("rol") == null) {
                 return new ResponseEntity<>("El campo 'rol' es obligatorio", HttpStatus.BAD_REQUEST);
             }
@@ -82,11 +75,9 @@ public class UsuarioController {
             
             Usuario usuario;
             
-            // Crear la instancia correcta según el rol
             if (rol == RolUsuario.PACIENTE) {
                 Paciente paciente = new Paciente();
                 
-                // Setear fecha de nacimiento si viene
                 if (usuarioData.containsKey("fechaNacimiento") && usuarioData.get("fechaNacimiento") != null) {
                     String fechaStr = (String) usuarioData.get("fechaNacimiento");
                     try {
@@ -101,7 +92,6 @@ public class UsuarioController {
             } else if (rol == RolUsuario.MEDICO) {
                 Medico medico = new Medico();
                 
-                // Setear especialidad si viene
                 if (usuarioData.containsKey("especialidad") && usuarioData.get("especialidad") != null) {
                     medico.setEspecialidad((String) usuarioData.get("especialidad"));
                 }
@@ -112,7 +102,6 @@ public class UsuarioController {
                 return new ResponseEntity<>("Rol no soportado", HttpStatus.BAD_REQUEST);
             }
             
-            // Setear campos comunes
             usuario.setRut((String) usuarioData.get("rut"));
             usuario.setNombre((String) usuarioData.get("nombre"));
             usuario.setApellido((String) usuarioData.get("apellido"));
@@ -120,7 +109,6 @@ public class UsuarioController {
             usuario.setContrasenia((String) usuarioData.get("contrasenia"));
             usuario.setRol(rol);
             
-            // Llamar al servicio para crear
             String resultado = usuarioService.crearUsuario(usuario);
             
             if (resultado.contains("ya se encuentra creado")) {
@@ -130,14 +118,12 @@ public class UsuarioController {
             return new ResponseEntity<>(resultado, HttpStatus.CREATED);
             
         } catch (Exception e) {
-            e.printStackTrace(); // Para debugging en consola del backend
+            e.printStackTrace();
             return new ResponseEntity<>("Error al crear usuario: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
-    /**
-     * Eliminar usuario por RUT
-     */
+
     @DeleteMapping("/{rut}")
     public ResponseEntity<String> eliminarUsuario(@PathVariable String rut) {
         try {

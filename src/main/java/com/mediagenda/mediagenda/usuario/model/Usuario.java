@@ -25,13 +25,13 @@ import jakarta.validation.constraints.Size;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "Tipo_Usuario")
 @JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME, // Usamos un nombre de propiedad (que existe en el JSON)
-    include = JsonTypeInfo.As.EXISTING_PROPERTY, // Indica que la propiedad ya existe en el JSON
-    property = "rol" // La propiedad que Jackson debe inspeccionar
+    use = JsonTypeInfo.Id.NAME, 
+    include = JsonTypeInfo.As.EXISTING_PROPERTY, 
+    property = "rol" 
 )
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = Paciente.class, name = "PACIENTE"), // Si rol es "PACIENTE", usa la clase Paciente
-    @JsonSubTypes.Type(value = Medico.class, name = "MEDICO")      // Si rol es "MEDICO", usa la clase Medico
+    @JsonSubTypes.Type(value = Paciente.class, name = "PACIENTE"), 
+    @JsonSubTypes.Type(value = Medico.class, name = "MEDICO")      
 })
 public abstract class Usuario {
 

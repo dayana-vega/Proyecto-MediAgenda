@@ -23,13 +23,10 @@ public class LoginController {
 
     private final UsuarioService usuarioService;
 
-    /**
-     * Endpoint de login - Validar credenciales
-     */
+
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginDTO loginDTO) {
         try {
-            // Validar que vengan email y contraseña
             if (loginDTO.getEmail() == null || loginDTO.getEmail().trim().isEmpty()) {
                 Map<String, Object> errorResponse = new HashMap<>();
                 errorResponse.put("success", false);
@@ -44,10 +41,8 @@ public class LoginController {
                 return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
             }
 
-            // Buscar usuario por email
             Usuario usuario = usuarioService.findByEmail(loginDTO.getEmail());
             
-            // Validar contraseña (comparación simple para proyecto universitario)
             if (!usuario.getContrasenia().equals(loginDTO.getContrasenia())) {
                 Map<String, Object> errorResponse = new HashMap<>();
                 errorResponse.put("success", false);
@@ -55,7 +50,6 @@ public class LoginController {
                 return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
             }
 
-            // Login exitoso - Crear respuesta con datos del usuario (SIN contraseña)
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "Login exitoso");
@@ -68,7 +62,6 @@ public class LoginController {
             userData.put("email", usuario.getEmail());
             userData.put("rol", usuario.getRol().toString());
             
-            // Agregar campos específicos según el tipo de usuario
             if (usuario instanceof Medico) {
                 Medico medico = (Medico) usuario;
                 userData.put("especialidad", medico.getEspecialidad());
@@ -85,7 +78,6 @@ public class LoginController {
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            // Si no se encuentra el usuario o hay otro error
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
             errorResponse.put("message", "Credenciales incorrectas");
@@ -93,19 +85,15 @@ public class LoginController {
         }
     }
 
-    /**
-     * Endpoint para verificar si un email ya existe
-     */
+
     @GetMapping("/verificar-email/{email}")
     public ResponseEntity<Map<String, Object>> verificarEmail(@PathVariable String email) {
         try {
             usuarioService.findByEmail(email);
-            // Si encuentra el usuario, el email existe
             Map<String, Object> response = new HashMap<>();
             response.put("existe", true);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            // Si no lo encuentra, el email está disponible
             Map<String, Object> response = new HashMap<>();
             response.put("existe", false);
             return ResponseEntity.ok(response);
