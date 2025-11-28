@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import com.mediagenda.mediagenda.exceptions.NotFoundException; // Asegúrate de tener esta excepción o usa RuntimeException
+import com.mediagenda.mediagenda.exceptions.NotFoundException;
 import com.mediagenda.mediagenda.horario.model.HorarioMedico;
 import com.mediagenda.mediagenda.horario.repository.HorarioRepository;
 import com.mediagenda.mediagenda.usuario.model.Medico;
@@ -24,7 +24,6 @@ public class HorarioService {
     private final HorarioRepository horarioRepository;
     private final MedicoRepository medicoRepository;
 
-    // Generar bloques (Tu método original, lo mantenemos igual)
     public List<LocalTime> generarBloques(HorarioMedico horarioMedico){
         List<LocalTime> bloques = new ArrayList<>();
         LocalTime actual = horarioMedico.getHorarioInicio();
@@ -35,12 +34,10 @@ public class HorarioService {
         return bloques;
     }
 
-    // NUEVO: Crear o Actualizar Horario
     public HorarioMedico guardarHorario(Long medicoId, HorarioMedico horario) {
         Medico medico = medicoRepository.findById(medicoId)
                 .orElseThrow(() -> new NotFoundException("Médico no encontrado"));
 
-        // Verificar si ya existe horario para ese día
         Optional<HorarioMedico> existente = horarioRepository.findByMedicoIdAndDia(medicoId, horario.getDia());
         
         if(existente.isPresent()) {
@@ -54,7 +51,6 @@ public class HorarioService {
         }
     }
 
-    // NUEVO: Obtener horarios del médico
     public List<HorarioMedico> obtenerHorariosPorMedico(Long medicoId) {
         return horarioRepository.findByMedicoId(medicoId);
     }

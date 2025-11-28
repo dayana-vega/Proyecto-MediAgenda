@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.mediagenda.mediagenda.cita.DTO.CrearCitaDTO;
 import com.mediagenda.mediagenda.cita.model.Cita;
 import com.mediagenda.mediagenda.cita.service.CitaService;
 import com.mediagenda.mediagenda.exceptions.CitaException;
@@ -19,10 +20,11 @@ public class CitaController {
     private final CitaService citaService;
 
     @PostMapping
-    public ResponseEntity<?> crearCita(@RequestBody Cita cita){
-        try{
-            return ResponseEntity.ok(citaService.crearCita(cita));
-        }catch (CitaException e){
+    public ResponseEntity<?> crearCita(@RequestBody CrearCitaDTO citaDTO) {
+        try {
+            Cita nuevaCita = citaService.crearCitaDesdeDTO(citaDTO);
+            return ResponseEntity.ok(nuevaCita);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -53,8 +55,11 @@ public class CitaController {
         try {
             citaService.eliminarCita(id);
             return ResponseEntity.ok("Cita eliminada correctamente");
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+        } catch (RuntimeException e) { 
+            if (e.getMessage().contains("no encontrada")) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.internalServerError().body("Error al eliminar: " + e.getMessage());
         }
     }
 }

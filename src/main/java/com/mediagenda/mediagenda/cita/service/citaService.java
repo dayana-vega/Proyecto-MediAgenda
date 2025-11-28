@@ -6,38 +6,42 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.mediagenda.mediagenda.cita.DTO.CrearCitaDTO;
 import com.mediagenda.mediagenda.cita.model.Cita;
 import com.mediagenda.mediagenda.cita.repository.CitaRepository;
+import com.mediagenda.mediagenda.enums.EstadoCita;
 import com.mediagenda.mediagenda.exceptions.CitaException;
+import com.mediagenda.mediagenda.exceptions.NotFoundException;
 import com.mediagenda.mediagenda.horario.model.HorarioMedico;
 import com.mediagenda.mediagenda.horario.repository.HorarioRepository;
 import com.mediagenda.mediagenda.horario.service.HorarioService;
+import com.mediagenda.mediagenda.usuario.model.Medico;
+import com.mediagenda.mediagenda.usuario.model.Paciente;
+import com.mediagenda.mediagenda.usuario.model.Usuario;
+import com.mediagenda.mediagenda.usuario.repository.UsuarioRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor // Usamos Lombok para inyección más limpia
+@RequiredArgsConstructor 
 public class CitaService {
 
     private final HorarioService horarioService;
     private final HorarioRepository horarioRepository;
     private final CitaRepository citaRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    // Método auxiliar para validar disponibilidad (Reutilizable)
     private void validarDisponibilidad(Long medicoId, java.time.LocalDateTime fechaCita) throws CitaException {
-        // 1. Verificar si el médico trabaja ese día
         HorarioMedico horarioMedico = horarioRepository.findByMedicoIdAndDia(
             medicoId,
             fechaCita.getDayOfWeek()
         ).orElseThrow(() -> new CitaException("El médico no atiende ese día (" + fechaCita.getDayOfWeek() + ")"));
 
-        // 2. Verificar si la hora está dentro de sus bloques
         List<LocalTime> bloquesDisponibles = horarioService.generarBloques(horarioMedico);
         if (!bloquesDisponibles.contains(fechaCita.toLocalTime())){
             throw new CitaException("Ese horario no está en la agenda del médico");
         }
 
-        // 3. Verificar si ya hay otra cita a esa misma hora
         if (citaRepository.findByMedicoIdAndFechaCita(medicoId, fechaCita).isPresent()){
             throw new CitaException("El medico ya tiene una cita ocupada en ese horario");
         }
@@ -47,6 +51,32 @@ public class CitaService {
         validarDisponibilidad(cita.getMedico().getId(), cita.getFechaCita());
         return citaRepository.save(cita);
     }
+
+    public Cita crearCitaDesdeDTO(CrearCitaDTO dto) throws CitaException {
+            Usuario usuarioMedico = usuarioRepository.findById(dto.getMedicoId())
+                    .orElseThrow(() -> new NotFoundException("Id de Médico no encontrado"));
+
+            if (!(usuarioMedico instanceof Medico)) {
+                throw new CitaException("El ID ingresado corresponde a un usuario que NO es médico");
+            }
+            Medico medico = (Medico) usuarioMedico;
+
+            Usuario usuarioPaciente = usuarioRepository.findById(dto.getPacienteId())
+                    .orElseThrow(() -> new NotFoundException("Id de Paciente no encontrado"));
+
+            if (!(usuarioPaciente instanceof Paciente)) {
+                throw new CitaException("El ID ingresado corresponde a un usuario que NO es paciente");
+            }
+            Paciente paciente = (Paciente) usuarioPaciente; 
+
+            Cita cita = new Cita();
+            cita.setFechaCita(dto.getFechaCita());
+            cita.setEstadoCita(EstadoCita.PENDIENTE);
+            cita.setMedico(medico);
+            cita.setPaciente(paciente);
+
+            return crearCita(cita);
+        }
 
     public List<Cita> obtenerTodasCitas(){
         return citaRepository.findAll();
@@ -60,7 +90,6 @@ public class CitaService {
         Cita citaExistente = citaRepository.findById(id)
             .orElseThrow(() -> new CitaException("Cita no encontrada con id: " + id));
 
-        // IMPORTANTE: Si se cambia la fecha, hay que validar disponibilidad de nuevo
         boolean fechaCambio = !citaExistente.getFechaCita().isEqual(citaActualizada.getFechaCita());
         
         if (fechaCambio) {
@@ -68,7 +97,6 @@ public class CitaService {
             citaExistente.setFechaCita(citaActualizada.getFechaCita());
         }
 
-        // Permitimos cambiar estado (ej: CANCELADA, REALIZADA)
         if(citaActualizada.getEstadoCita() != null) {
             citaExistente.setEstadoCita(citaActualizada.getEstadoCita());
         }

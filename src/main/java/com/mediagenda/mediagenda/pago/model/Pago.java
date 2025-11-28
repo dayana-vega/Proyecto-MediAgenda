@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mediagenda.mediagenda.cita.model.Cita;
+import com.mediagenda.mediagenda.enums.TipoPago;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -19,12 +20,14 @@ public class Pago {
 
     private Double monto;
     private LocalDateTime fechaPago;
-    private String metodoPago; // "TARJETA_CREDITO", "DEBITO", "EFECTIVO"
 
-    // Relación 1 a 1 con Cita
+    @Enumerated(EnumType.STRING)
+    @Column(name = "metodo_pago")
+    private TipoPago metodoPago; 
+
     @OneToOne
     @JoinColumn(name = "cita_id", referencedColumnName = "id")
-    @JsonIgnore // Evitar loop infinito al serializar
+    @JsonIgnore
     private Cita cita;
 
     @PrePersist

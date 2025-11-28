@@ -19,21 +19,16 @@ public class PagoService {
     private final PagoRepository pagoRepository;
     private final CitaRepository citaRepository;
 
-    @Transactional // Importante: si falla el pago, no se actualiza la cita
+    @Transactional
     public Pago procesarPago(Integer citaId, Pago pago) {
-        // 1. Buscar la cita
         Cita cita = citaRepository.findById(citaId)
                 .orElseThrow(() -> new NotFoundException("Cita no encontrada"));
 
-        // 2. Asociar cita al pago
         pago.setCita(cita);
-        pago.setMonto(25000.0); // Monto fijo simulado o dinámico según lógica
 
-        // 3. Guardar pago
         Pago pagoGuardado = pagoRepository.save(pago);
 
-        // 4. Actualizar estado de la cita automáticamente
-        cita.setEstadoCita(EstadoCita.CONFIRMADA); // Asumiendo que tienes este estado
+        cita.setEstadoCita(EstadoCita.CONFIRMADA);
         citaRepository.save(cita);
 
         return pagoGuardado;
