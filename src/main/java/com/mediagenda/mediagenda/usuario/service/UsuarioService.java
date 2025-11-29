@@ -1,5 +1,6 @@
 package com.mediagenda.mediagenda.usuario.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -51,6 +52,15 @@ public class UsuarioService {
             return "Usuario no existe para eliminar";
         }
 
+    }
+
+    public List<Usuario> listarMedicos(){
+        return usuarioRepository.findByRol(com.mediagenda.mediagenda.enums.RolUsuario.MEDICO);
+        
+    }
+
+    public List<Usuario> mostrarUsuarios(){
+        return usuarioRepository.findAll();
     }
 
 

@@ -31,7 +31,9 @@ import jakarta.validation.constraints.Size;
 )
 @JsonSubTypes({
     @JsonSubTypes.Type(value = Paciente.class, name = "PACIENTE"), 
-    @JsonSubTypes.Type(value = Medico.class, name = "MEDICO")      
+    @JsonSubTypes.Type(value = Medico.class, name = "MEDICO"),
+    @JsonSubTypes.Type(value = Paciente.class, name = "ADMIN") 
+
 })
 public abstract class Usuario {
 

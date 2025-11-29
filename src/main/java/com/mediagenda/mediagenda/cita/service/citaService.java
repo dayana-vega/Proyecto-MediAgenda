@@ -1,5 +1,7 @@
 package com.mediagenda.mediagenda.cita.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -110,4 +112,28 @@ public class CitaService {
         }
         citaRepository.deleteById(id);
     }
+    public List<LocalTime> obtenerHorasOcupadas(Long medicoId, LocalDate fecha) {
+        LocalDateTime inicioDia = fecha.atStartOfDay();
+        LocalDateTime finDia = fecha.atTime(LocalTime.MAX);
+
+        List<Cita> citas = citaRepository.findByMedicoIdAndFechaCitaBetween(medicoId, inicioDia, finDia);
+
+        return citas.stream()
+                .filter(c -> c.getEstadoCita() != EstadoCita.CANCELADA) // Si está cancelada, el horario cuenta como libre
+                .map(c -> c.getFechaCita().toLocalTime())
+                .toList();
+    }
+
+    // En CitaService.java
+    public List<Cita> listarCitasPorUsuario(Long usuarioId, com.mediagenda.mediagenda.enums.RolUsuario rol) {
+        if (rol == com.mediagenda.mediagenda.enums.RolUsuario.PACIENTE) {
+            return citaRepository.findByPacienteId(usuarioId);
+        } else {
+            return citaRepository.findByMedicoId(usuarioId);
+        }
+    }
+    
+
+
+
 }

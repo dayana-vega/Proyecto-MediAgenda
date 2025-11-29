@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.mediagenda.mediagenda.exceptions.NotFoundException;
 import com.mediagenda.mediagenda.usuario.model.Usuario;
 import com.mediagenda.mediagenda.usuario.model.Paciente;
+import com.mediagenda.mediagenda.usuario.model.Administrador;
 import com.mediagenda.mediagenda.usuario.model.Medico;
 import com.mediagenda.mediagenda.usuario.service.UsuarioService;
 import com.mediagenda.mediagenda.enums.RolUsuario;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -98,6 +100,9 @@ public class UsuarioController {
                 
                 usuario = medico;
                 
+            } else if (rol == RolUsuario.ADMIN) {
+                Administrador admin = new Administrador();
+                usuario = admin;
             } else {
                 return new ResponseEntity<>("Rol no soportado", HttpStatus.BAD_REQUEST);
             }
@@ -137,5 +142,14 @@ public class UsuarioController {
         } catch (Exception e) {
             return new ResponseEntity<>("Error al eliminar usuario: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/medicos")
+    public ResponseEntity<List<Usuario>> listarMedicos() {
+        return ResponseEntity.ok(usuarioService.listarMedicos());
+    }
+    @GetMapping
+    public ResponseEntity<List<Usuario>> listarTodos() {
+        return ResponseEntity.ok(usuarioService.mostrarUsuarios());
     }
 }
