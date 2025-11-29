@@ -54,4 +54,8 @@ public class HorarioService {
     public List<HorarioMedico> obtenerHorariosPorMedico(Long medicoId) {
         return horarioRepository.findByMedicoId(medicoId);
     }
+
+    public void eliminarHorario(Long id){
+        horarioRepository.deleteById(id);
+    }
 }

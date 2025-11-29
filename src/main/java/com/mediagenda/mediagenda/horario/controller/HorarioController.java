@@ -26,4 +26,11 @@ public class HorarioController {
     public ResponseEntity<List<HorarioMedico>> obtenerHorarios(@PathVariable Long medicoId) {
         return ResponseEntity.ok(horarioService.obtenerHorariosPorMedico(medicoId));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarHorario(@PathVariable Long id){
+        horarioService.eliminarHorario(id);
+        return ResponseEntity.ok().build();
+    }
+
 }
