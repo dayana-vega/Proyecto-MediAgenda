@@ -42,9 +42,11 @@ public class Medico extends Usuario{
     private Set<Paciente> pacientes = new HashSet<>();
 
     @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Cita> citas;
 
     @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<HorarioMedico> horarios;
 
 }
