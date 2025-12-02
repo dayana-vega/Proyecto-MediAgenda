@@ -3,6 +3,7 @@ package com.mediagenda.mediagenda.horario.model;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mediagenda.mediagenda.usuario.model.Medico;
 
 import jakarta.persistence.Entity;
@@ -24,6 +25,7 @@ public class HorarioMedico {
 
     @ManyToOne
     @JoinColumn(name = "medico_id")
+    @JsonIgnore
     private Medico medico;
 
     public Long getId() {
